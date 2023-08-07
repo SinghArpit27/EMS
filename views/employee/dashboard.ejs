@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Employee Dashboard</title>
+    <link rel="stylesheet" href="css/employees/employeeDashboard.css" />
+
+    <!-- other styling link -->
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+  </head>
+  <body>
+    <!-- Header Navbar -->
+    <nav class="navbar">
+      <div class="max-width">
+        <div class="menu-btn">
+          <i class="fas fa-bars"></i>
+        </div>
+        <div class="logo">
+          <a href="#">EM<span>S</span></a>
+        </div>
+        <ul class="menu">
+          <li>
+            <a href="/dashboard" class="menu-btn" aria-current="page">Home</a>
+          </li>
+          <li><a href="/empDetails" class="menu-btn">Employee Details</a></li>
+          <li><a href="#" class="menu-btn">About</a></li>
+          <li><a href="#" class="menu-btn">Contact</a></li>
+        </ul>
+        <!-- <div class="profile-pic"> -->
+        <img
+          src="uploads/employeeImages/<%= user.empImg %>"
+          alt="<%= user.empImg %>"
+          class="profile-pic"
+          onclick="toggleMenu()"
+        />
+        <!-- <img src="arpit.jpg" class="profile-pic" onclick="toggleMenu()"> -->
+        <!-- </div> -->
+
+        <div class="sub-menu-wrap" id="subMenu">
+          <div class="sub-menu">
+            <div class="user-info">
+              <img
+                src="uploads/employeeImages/<%= user.empImg %>"
+                class="profile-pic"
+              />
+              <h3><%= user.name %> <br />E-Code ( <%= user.empCode %> )</h3>
+            </div>
+            <hr />
+            <a href="/editProfile?id=<%= user._id %>" class="sub-menu-link">
+              <i class="fa fa-user" aria-hidden="true"></i>
+              <p>Edit Profile</p>
+              <!-- <span>></span> -->
+            </a>
+            <a href="#" class="sub-menu-link">
+              <i class="fa fa-envelope" aria-hidden="true"></i>
+              <p><%= user.email %></p>
+            </a>
+            <a href="#" class="sub-menu-link">
+              <i class="fas fa-mobile-alt"></i>
+              <p><%= user.phone %></p>
+            </a>
+            <a href="#" class="sub-menu-link">
+              <i class="fas fa-sign-out-alt"></i>
+              <p><%= user.empJobTitle %></p>
+              <!-- <span>></span> -->
+            </a>
+            <a href="/logout" class="sub-menu-link">
+              <i class="fas fa-sign-out-alt"></i>
+              <p>Logout</p>
+              <!-- <span>></span> -->
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- home/hero section -->
+    <section class="home" id="home">
+      <!-- <input type="text"> -->
+      <div class="home-content">
+        <p class="home-title">
+          Hello! Welcome to the EMS
+          <br />
+          <!-- Free and Open-Source Projects Plateform for Students -->
+        </p>
+        <p class="home-title-des">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores,
+          atque! Dolorum voluptatum magni reiciendis pariatur, deserunt deleniti
+          explicabo repudiandae blanditiis praesentium repellat adipisci.
+          Voluptate repellendus assumenda non aperiam amet quis, totam iure
+          itaque fugiat temporibus, tempora sunt, voluptatum ducimus illo!
+        </p>
+        <a href="#"><button class="btn">Explore</button></a>
+      </div>
+      <!-- image -->
+      <div class="home-image">
+        <img src="img/home-bg.png" alt="home-image" />
+      </div>
+    </section>
+
+    <script src="js/employees/home.js"></script>
+  </body>
+</html>
