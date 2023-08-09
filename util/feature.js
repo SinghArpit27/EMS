@@ -4,7 +4,7 @@ const secret = 'employee_management_system';
 const createToken = async (employeeData) => {
     try {
         
-        const token = await jwt.sign({ _id: employeeData._id }, secret, { expiresIn: '10m' });
+        const token = await jwt.sign({ _id: employeeData._id }, secret, { expiresIn: '100m' });
         return token;
 
     } catch (error) {

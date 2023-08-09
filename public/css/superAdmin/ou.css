@@ -1,0 +1,29 @@
+/* #home-container{
+    border: 1px solid green;
+    padding-top: 7rem;
+} */
+
+.card-container{
+    /* border: 1px solid red; */
+    width: 60%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+}
+.card-wrap{
+    width: 42%;
+    height: 11.7rem;
+    background: linear-gradient(81.67deg, #0084f4 0%, #1a4da2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.card{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    gap: 1rem;
+    color: #fff;
+}

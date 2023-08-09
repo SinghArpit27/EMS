@@ -6,6 +6,9 @@
       <link rel="stylesheet" href="css/employees/login.css">
    </head>
    <body>
+      <% if(typeof message !== 'undefined'){ %>
+         <h4><%= message %></h4>
+      <% } %>
       <div class="wrapper">
          <div class="title">
             Login Form
@@ -25,14 +28,17 @@
                   <label for="remember-me">Remember me</label>
                </div>
                <div class="pass-link">
-                  <a href="">Forgot password?</a>
+                  <a href="/forgetPassword">Forgot password?</a>
                </div>
             </div>
             <div class="field">
                <input type="submit" value="Login">
             </div>
             <div class="signup-link">
-               Not a member? <a href="/register">Signup now</a>
+               Not a member? <a href="/register">Create One</a>
+            </div>
+            <div class="signup-link">
+               Not Verified <a href="/emailVerify">Verify</a>
             </div>
          </form>
       </div>

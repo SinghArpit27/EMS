@@ -1,9 +1,10 @@
 const Employee = require('../models/employeeSchema');
 const bcrypt = require('bcrypt');
 const { check, validationResult } = require("express-validator");
-const sendVerifyMail = require('../helpers/employeeVerification');
+const mailService = require('../helpers/employeeVerification');
 const nodemailer = require("nodemailer");
 const { createToken, decodeToken } = require('../util/feature');
+const randomstring = require('randomstring');
 
 
 const loadRegister = async (req,res) => {
@@ -38,7 +39,8 @@ const insertEmployee = async (req,res) => {
             // const token = await employee.createToken(employee._id);
             const empData = await employee.save();
             if(empData){
-                sendVerifyMail(req.body.name, req.body.email, empData._id);
+                // sendVerifyMail(req.body.name, req.body.email, empData._id);
+                mailService.sendVerifyMail(req.body.name, req.body.email, empData._id);
                 res.render('register', { message: "Registration done Successfully, Please Verify" });
             }else{
                 res.render('register', { message: "Registration Failed" });
@@ -82,19 +84,21 @@ const verifyLogin = async (req,res) => {
         if(passwordMatch){
 
             // if password is matched then we check mail is verified or not
-            if (employeeData.is_varified === 0) {
+            if (employeeData.is_varified === 1) {
+                if(employeeData.role === 3){
+                    // JWT Authentication logic
+                    const token = await createToken(employeeData);
+                    res.cookie("EMS_Token", token, {
+                        httpOnly: true
+                        // maxAge: 15 * 60 * 1000,
+                    });
+                    res.redirect('/dashboard');
+                }else{
+                    res.render('login', { message: "Login Details are incorrect" });
+                }
+            } else {              
+                
                 res.render("login", { message: "Please verify your Email." });
-            } else {
-
-                // JWT Authentication logic
-                const token = await createToken(employeeData);
-                res.cookie("EMS_Token", token, {
-                    httpOnly: true
-                    // maxAge: 15 * 60 * 1000,
-                });
-
-                res.redirect('/dashboard');
-
             }
         }else{
             res.render('login', { message: "Login Details are incorrect" });
@@ -213,6 +217,112 @@ const updateProfile = async (req,res) => {
     }
 }
 
+const loadForgetPassword = async (req,res) => {
+    try {
+        
+        res.render('forgetPassword');
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const resetPassword = async (req,res) => {
+    try {
+        
+        const email = req.body.email;
+        const employData = await Employee.findOne({ email: email });
+        if(employData){
+            if(employData.is_varified === 0){
+                res.render('forgetPassword', { message: "Your Email is not varified, please very your email" });
+            }else{
+                const randomString = randomstring.generate();
+                const updatedData = await Employee.updateOne(
+                    { email: email },
+                    { $set:{ token: randomString } }
+                );
+                mailService.sendResetPasswordMail(employData.name, employData.email, randomString);
+                res.render('forgetPassword', {message: "Please check your mail to Reset Password"});
+            }
+        }else{
+            res.render('forgetPassword', { message: "Email is incorrect" });
+        }
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const resetPasswordLoad = async (req,res) =>{
+    try {
+        
+        const token = req.query.token;
+        const employData = await Employee.findOne({ token: token });
+        if(employData){
+
+            res.render('resetPassword', { employ_id: employData._id });
+
+        }else{
+            res.render('notFound', {message: "Invalid token"});
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const verifyresetPassword = async (req,res) => {
+    try {
+        
+        const password = req.body.password;
+        const employ_id = req.body.employ_id;
+
+        const spassword = await bcrypt.hash(password, 10);
+
+        const updatedData = await Employee.findByIdAndUpdate(
+            { _id: employ_id },
+            { $set: { password: spassword, token: "" } }
+        );
+        res.redirect('/login');
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const emailVerificationLinkLoad = async (req,res) => {
+    try {
+        
+        res.render('email-verify');
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const emailVerificationLink = async (req,res) => {
+    try {
+        const email = req.body.email;
+
+        const employData = await Employee.findOne({ email: email });
+        if(employData){
+            mailService.sendVerifyMail(employData.name, employData.email, employData._id);
+            res.render("email-verify", {
+                message:
+                  "verification mail is sent in your registered mail id please check",
+              });
+        }else{
+            res.render("email-verify", { message: "This email is not exist" });
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+
+
+}
+
+
+
 module.exports = {
     loadRegister,
     insertEmployee,
@@ -224,5 +334,11 @@ module.exports = {
     loadUnauthorizedError,
     logout,
     editProfileLoad,
-    updateProfile
+    updateProfile,
+    loadForgetPassword,
+    resetPassword,
+    resetPasswordLoad,
+    verifyresetPassword,
+    emailVerificationLinkLoad,
+    emailVerificationLink
 }

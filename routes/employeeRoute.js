@@ -43,11 +43,21 @@ employRoute.post('/register', upload.single('image'), employeeValidation.registe
 
 // Verify Employee Route
 employRoute.get('/verify',employeeController.verifyMail);
+// resend verification mail
+employRoute.get('/emailVerify', employeeController.emailVerificationLinkLoad);
+employRoute.post('/emailVerify', employeeController.emailVerificationLink);
 
 // login Route
 employRoute.get('/', employeeController.loginLoad);
 employRoute.get('/login', employeeController.loginLoad);
 employRoute.post('/login', employeeController.verifyLogin);
+
+// Forget password
+employRoute.get('/forgetPassword', employeeController.loadForgetPassword);
+employRoute.post('/forgetPassword', employeeController.resetPassword);
+employRoute.get('/forget-password', employeeController.resetPasswordLoad);
+employRoute.post('/forget-password', employeeController.verifyresetPassword);
+
 
 // Dashboard Route
 employRoute.get('/dashboard', auth, employeeController.loadDashboard);
@@ -58,7 +68,7 @@ employRoute.post('/editProfile', upload.single('image'), employeeController.upda
 employRoute.get('/empDetails', auth, employeeController.loadEmpDetail);
 
 // Logout Route
-employRoute.get('/logout', auth, employeeController.logout)
+employRoute.get('/logout', auth, employeeController.logout);
 
 // Errors Route
 employRoute.get('/errorUna', employeeController.loadUnauthorizedError);

@@ -12,6 +12,14 @@ app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
 
 
+// Super Admin Route
+const superAdminRoute = require('./routes/superAdminRoute');
+app.use('/superAdmin', superAdminRoute);
+
+// Admin Route
+const adminRoute = require('./routes/adminRoute');
+app.use('/admin', adminRoute);
+
 // Employee Route
 const employRoute = require('./routes/employeeRoute');
 app.use('/',employRoute);

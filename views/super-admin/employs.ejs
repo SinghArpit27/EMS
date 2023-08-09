@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Employee Dashboard</title>
+    <title>Super Admin Dashboard</title>
     <link rel="stylesheet" href="css/employees/employeeDashboard.css" />
+    <link rel="stylesheet" href="css/superAdmin/adminAndEmploy.css" />
 
     <!-- other styling link -->
 
@@ -40,9 +41,11 @@
         </div>
         <ul class="menu">
           <li>
-            <a href="/dashboard" class="menu-btn" aria-current="page">Home</a>
+            <a href="/superAdmin/dashboard" class="menu-btn" aria-current="page"
+              >Home</a
+            >
           </li>
-          <li><a href="/empDetails" class="menu-btn">Employee Details</a></li>
+          <li><a href="/superAdmin/organisationalUnit">OU</a></li>
           <li><a href="#" class="menu-btn">About</a></li>
           <li><a href="#" class="menu-btn">Contact</a></li>
         </ul>
@@ -66,7 +69,10 @@
               <h3><%= user.name %> <br />E-Code ( <%= user.empCode %> )</h3>
             </div>
             <hr />
-            <a href="/editProfile?id=<%= user._id %>" class="sub-menu-link">
+            <a
+              href="/superAdmin/editProfile?id=<%= user._id %>"
+              class="sub-menu-link"
+            >
               <i class="fa fa-user" aria-hidden="true"></i>
               <p>Edit Profile</p>
               <!-- <span>></span> -->
@@ -84,7 +90,7 @@
               <p><%= user.empJobTitle %></p>
               <!-- <span>></span> -->
             </a>
-            <a href="/logout" class="sub-menu-link">
+            <a href="#" class="sub-menu-link">
               <i class="fas fa-sign-out-alt"></i>
               <p>Logout</p>
               <!-- <span>></span> -->
@@ -95,26 +101,65 @@
     </nav>
 
     <!-- home/hero section -->
-    <section class="home" id="home">
-      <!-- <input type="text"> -->
-      <div class="home-content">
-        <p class="home-title">
-          Hello! Welcome to the EMS
-          <br />
-          <!-- Free and Open-Source Projects Plateform for Students -->
-        </p>
-        <p class="home-title-des">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores,
-          atque! Dolorum voluptatum magni reiciendis pariatur, deserunt deleniti
-          explicabo repudiandae blanditiis praesentium repellat adipisci.
-          Voluptate repellendus assumenda non aperiam amet quis, totam iure
-          itaque fugiat temporibus, tempora sunt, voluptatum ducimus illo!
-        </p>
-        <a href="#"><button class="btn">Explore</button></a>
-      </div>
-      <!-- image -->
-      <div class="home-image">
-        <img src="img/home-bg.png" alt="home-image" />
+    <section class="home-container" id="home-container">
+      <h1 class="title">Employees List</h1>
+      <div class="table-container">
+        <div class="table_responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Sl</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Employee Code</th>
+                <th>Phone</th>
+                <th>Job Title</th>
+                <th>Role</th>
+                <th>Verified</th>
+                <th>Edit</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+
+            <% if(employs.length > 0){ for(let i = 0; i < employs.length; i++){
+            %>
+            <tbody>
+              <tr>
+                <td>01</td>
+                <td>
+                  <img
+                    src="uploads/superAdminImages/<%= employs[i].empImg %>"
+                    alt=""
+                    id="profile-pic"
+                  />
+                </td>
+                <td><%= employs[i].name %></td>
+                <td><%= employs[i].email%></td>
+                <td><%= employs[i].empCode %></td>
+                <td><%= employs[i].phone %></td>
+                <td><%= employs[i].empJobTitle %></td>
+                <td><%= employs[i].role %></td>
+                <td><%= employs[i].is_varified %></td>
+                <td>
+                  <span class="action_btn">
+                    <a href="#">Edit</a>
+                  </span>
+                </td>
+                <td>
+                  <span class="action_btn">
+                    <a href="#">Lock</a>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+            <% } }else{ %>
+            <tr>
+              <td colspan="10">User Not Found</td>
+            </tr>
+            <% } %>
+          </table>
+        </div>
       </div>
     </section>
 

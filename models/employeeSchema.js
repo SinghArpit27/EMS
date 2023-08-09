@@ -16,7 +16,8 @@ const employeeSchema = new mongoose.Schema({
     },
     phone:{
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     empImg:{
         type:String
@@ -29,7 +30,7 @@ const employeeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    is_admin:{
+    role:{
         type:Number,
         default:0
     },
