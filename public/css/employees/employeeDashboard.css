@@ -19,12 +19,13 @@
 } */
 
 .title {
+  font-size: 2.2rem;
+  /* color: #00bcd4; */
+  color: #004a60;
   text-align: center;
-  font-size: 2.5rem;
+  margin-top: 4rem;
+  margin-bottom: 1rem;
   font-weight: 600;
-  padding-top: 4rem;
-  padding-bottom: 1rem;
-  color: #11142d;
 }
 .btn {
   background: #3498db;

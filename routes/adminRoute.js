@@ -33,29 +33,59 @@ const upload = multer({storage:storage});
 
 
 
-// import employeeController
+// import Admin Controller
 const adminController = require('../controllers/adminController');
+
 // Register Route
-// superAdminRoute.get('/register', superAdminController.loadRegister);
-// superAdminRoute.post('/register', upload.single('image'), employeeValidation.registerValidation, superAdminController.insertEmployee);
+adminRoute.get('/register', adminController.loadRegister);
+adminRoute.post('/register', upload.single('image'), employeeValidation.registerValidation, adminController.insertEmployee);
 
 
-// // Forget password
-// superAdminRoute.get('/forgetPassword', superAdminController.loadForgetPassword);
-// superAdminRoute.post('/forgetPassword', superAdminController.resetPassword);
-// superAdminRoute.get('/forget-password', superAdminController.resetPasswordLoad);
-// superAdminRoute.post('/forget-password', superAdminController.verifyresetPassword);
+// Dashboard Route
+adminRoute.get('/dashboard', auth, adminController.loadDashboard);
+adminRoute.get('/editProfile', auth, adminController.editProfileLoad);
+adminRoute.post('/editProfile', upload.single('image'), adminController.updateProfile );
 
 
-// // Dashboard Route
-// superAdminRoute.get('/dashboard', auth, superAdminController.loadDashboard);
-// superAdminRoute.get('/editProfile', auth, superAdminController.editProfileLoad);
-// superAdminRoute.post('/editProfile', upload.single('image'), superAdminController.updateProfile );
+// Employee Route
+adminRoute.get('/employsList', auth, adminController.loadEmploysList);
 
-// // OU Route
-// superAdminRoute.get('/organisationalUnit', auth, superAdminController.loadOU);
-// superAdminRoute.get('/adminsList', auth, superAdminController.loadAdminsList);
-// superAdminRoute.get('/employsList', auth, superAdminController.loadEmploysList);
+
+// Update Employe Route
+adminRoute.get('/edit-employ', adminController.loadEditEmploy);
+adminRoute.post('/edit-employ', adminController.updateEmployProfile);
+
+// Send Mail Route
+adminRoute.get('/sendMail', adminController.loadSendMail);
+adminRoute.post('/sendMail', adminController.sendMail);
+
+// Logout Route
+adminRoute.get('/logout', auth, adminController.logout);
+
+// Delete Employ Route
+adminRoute.get('/delete-employ', adminController.deleteEmploy);
+adminRoute.get('/create-team', adminController.loadCreateTeam);
+adminRoute.get('/createTeam', adminController.createTeam);
+
+
+
+
+
+// team creation
+adminRoute.get('/team', adminController.loadTeam);
+
+
+
+
+
+
+
+
+
+
+adminRoute.get('*', (req,res) => {
+    res.redirect('/superAdmin/dashboard');
+});
 
 
 module.exports = adminRoute;

@@ -66,7 +66,14 @@ superAdminRoute.post('/edit-employ', superAdminController.updateEmployProfile);
 superAdminRoute.get('/export-employs', superAdminController.exportEmploys);
 
 // Send Mail Route
-superAdminRoute.get('/sendMail', superAdminController.sendMail);
+superAdminRoute.get('/sendMail', superAdminController.loadSendMail);
+superAdminRoute.post('/sendMail', superAdminController.sendMail);
+
+// Logout Route
+superAdminRoute.get('/logout', auth, superAdminController.logout);
+
+// Delete Employ Route
+superAdminRoute.get('/delete-employ', superAdminController.deleteEmploy);
 
 superAdminRoute.get('*', (req,res) => {
     res.redirect('/superAdmin/dashboard');

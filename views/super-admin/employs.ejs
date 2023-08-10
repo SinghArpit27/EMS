@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="css/superAdmin/adminAndEmploy.css" />
 
     <!-- other styling link -->
-
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -16,7 +15,6 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-
     <script
       src="https://code.jquery.com/jquery-3.6.0.min.js"
       integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
@@ -28,7 +26,63 @@
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+
+    <style>
+      #search-form {
+        display: flex;
+        align-items: center;
+        background-color: #00bcd4;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      #input-search {
+        flex: 1;
+        padding: 8px;
+        border: none;
+        border-radius: 3px;
+        /* background-color: #00000017; */
+        color: #111;
+        /* color: white; */
+        outline: none;
+      }
+
+      input[type="submit"] {
+        background-color: #00000017;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 3px;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #00000030;
+      }
+      .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
+      .pagination a {
+        margin: 0 5px;
+        padding: 5px 10px;
+        background-color: #00bcd4;
+        color: white;
+        border-radius: 3px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+      }
+
+      .pagination a:hover {
+        background-color: #00000017;
+      }
+    </style>
   </head>
+
   <body>
     <!-- Header Navbar -->
     <nav class="navbar">
@@ -46,7 +100,9 @@
             >
           </li>
           <li><a href="/superAdmin/organisationalUnit">OU</a></li>
-          <li><a href="/superAdmin/register" class="menu-btn">Add New Employee</a></li>
+          <li>
+            <a href="/superAdmin/register" class="menu-btn">Add New Employee</a>
+          </li>
           <li><a href="/superAdmin/sendMail" class="menu-btn">Send Mail</a></li>
         </ul>
         <!-- <div class="profile-pic"> -->
@@ -90,7 +146,7 @@
               <p><%= user.empJobTitle %></p>
               <!-- <span>></span> -->
             </a>
-            <a href="#" class="sub-menu-link">
+            <a href="/logout" class="sub-menu-link">
               <i class="fas fa-sign-out-alt"></i>
               <p>Logout</p>
               <!-- <span>></span> -->
@@ -103,9 +159,20 @@
     <!-- home/hero section -->
     <section class="home-container" id="home-container">
       <h1 class="title">Employees List</h1>
-      
+
       <div class="table-container">
         <div class="table_responsive">
+          <form action="" id="search-form">
+            <input
+              type="text"
+              placeholder="Search Employees Name, Email, mobile, E-code"
+              name="search"
+              id="input-search"
+            />
+            <input type="submit" value="Search" id="search-btn" />
+          </form>
+          <br />
+
           <table>
             <thead>
               <tr>
@@ -119,16 +186,16 @@
                 <th>Role</th>
                 <th>Verified</th>
                 <th>Edit</th>
+                <th>Lock</th>
                 <th>Delete</th>
               </tr>
             </thead>
 
             <% if(employs.length > 0){ for(let i = 0; i < employs.length; i++){
-              let count = i + 1;
-            %>
+            let count = i + 1; %>
             <tbody>
               <tr>
-                <td> <%= count %> </td>
+                <td><%= count %></td>
                 <td>
                   <img
                     src="uploads/superAdminImages/<%= employs[i].empImg %>"
@@ -142,24 +209,28 @@
                 <td><%= employs[i].phone %></td>
                 <td><%= employs[i].empJobTitle %></td>
                 <td><%= employs[i].role %></td>
-                <% if(employs[i].is_varified == 0){
-                  %>
-                    <td>Not Verified</td>
-                  <%
-                }else{
-                  %>
-                    <td>Verified</td>
-                  <%
-                }
-                %>
+                <% if(employs[i].is_varified == 0){ %>
+                <td>Not Verified</td>
+                <% }else{ %>
+                <td>Verified</td>
+                <% } %>
                 <td>
                   <span class="action_btn">
-                    <a href="/superAdmin/edit-employ?id=<%= employs[i]._id %>">Edit</a>
+                    <a href="/superAdmin/edit-employ?id=<%= employs[i]._id %>"
+                      >Edit</a
+                    >
                   </span>
                 </td>
                 <td>
                   <span class="action_btn">
                     <a href="#">Lock</a>
+                  </span>
+                </td>
+                <td>
+                  <span class="action_btn">
+                    <a href="/superAdmin/delete-employ?id=<%= employs[i]._id %>"
+                      >Delete</a
+                    >
                   </span>
                 </td>
               </tr>
@@ -170,6 +241,30 @@
             </tr>
             <% } %>
           </table>
+
+          <br />
+
+          <div class="pagination">
+            <% for(let j = 1; j <= totalPages; j++){ %>
+            <a href="?page=<%= j %>"><%= j %></a>
+            <% } %>
+          </div>
+
+          <!-- <% if (currentPage > 1) { %>
+            <a href="?page=<%= currentPage - 1 %>">Previous</a>
+          <% } %>
+          
+          <%
+            for (let j = 1; j <= totalPages; j++) {
+          %>
+            <a href="?page=<%= j %>"><%= j %></a>
+          <%
+            }
+          %>
+          
+          <% if (currentPage < totalPages) { %>
+            <a href="?page=<%= currentPage + 1 %>">Next</a>
+          <% } %> -->
         </div>
       </div>
     </section>

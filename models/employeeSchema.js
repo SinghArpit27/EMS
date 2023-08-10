@@ -41,7 +41,8 @@ const employeeSchema = new mongoose.Schema({
     token:{
         type:String,
         default:''
-    }
+    },
+    
 });
 
 module.exports = mongoose.model("Employee", employeeSchema);

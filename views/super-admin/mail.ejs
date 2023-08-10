@@ -83,7 +83,7 @@
               <p><%= user.empJobTitle %></p>
               <!-- <span>></span> -->
             </a>
-            <a href="#" class="sub-menu-link">
+            <a href="/logout" class="sub-menu-link">
               <i class="fas fa-sign-out-alt"></i>
               <p>Logout</p>
               <!-- <span>></span> -->
@@ -96,6 +96,17 @@
     <!-- home/hero section -->
     <section class="home-container" id="home-container">
       <h1 class="title">Send Mail To All Employees</h1>
+
+      <form action="" method="post">
+        <input type="text" placeholder="Subject" name="subject">
+        <br><br>
+        <textarea name="message" id="" cols="30" rows="10" placeholder="Start Typing..."></textarea>
+        <input type="submit" value="Send Mail To All User">
+      </form>
+
+      <% if(typeof message !== 'undefined'){ %>
+        <p style="color: green;"><%= message %>&#x2713;&#x2713;</p>
+      <% } %>
 
     </section>
 

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EMS | Edit Employ</title>
+    <!-- bootstrap css link-->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Edit Employee</h2>
+
+      <% if(typeof errors != 'undefined') { %> <% errors.forEach(function(error)
+      { %>
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <%= error.msg %>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      <% }) %> <% } %>
+
+      <form action="" method="post">
+        <input type="hidden" name="employ_id" value="<%= employ._id %>" />
+        <input
+          type="text"
+          name="name"
+          placeholder="name"
+          value="<%= employ.name %>"
+          required
+        />
+        <br /><br />
+        <input
+          type="email"
+          name="email"
+          placeholder="abc@example.com"
+          value="<%= employ.email %>"
+          required
+        />
+        <br /><br />
+        <input
+          type="text"
+          placeholder="empCode"
+          name="empCode"
+          value="<%= employ.empCode %>"
+          required
+        />
+        <br /><br />
+        <input
+          type="text"
+          placeholder="phone"
+          name="phone"
+          value="<%= employ.phone %>"
+          required
+        />
+        <br /><br />
+        <input
+          type="text"
+          placeholder="Job Title"
+          name="empJobTitle"
+          value="<%= employ.empJobTitle %>"
+          required
+        />
+        <br /><br />
+        <input
+          type="text"
+          placeholder="Employee Role"
+          name="role"
+          value="<%= employ.role %>"
+          required
+        />
+        <br /><br />
+        <label>Verified</label>
+        <input type="radio" name="verify" value="1" <% if(employ.is_varified ==
+        1) { %> checked <% } %>>
+        <label>Not Verified</label>
+        <input type="radio" name="verify" value="0" <% if(employ.is_varified ==
+        0) { %> checked <% } %>>
+        <br /><br />
+        <input type="submit" value="Update Profile" />
+      </form>
+
+      <% if(typeof message !== 'undefined'){ %>
+      <p style="color: red"><%= message %>&#x2713;&#x2713;</p>
+      <% } %>
+    </div>
+
+    <a href="/superAdmin/dashboard">Home</a>
+    <!-- bootstrap script -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

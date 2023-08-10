@@ -107,8 +107,41 @@ const addEmployMail = async (name, email, password, user_id) => {
   }
 };
 
+const sendMailToAll = async (name, email, subject, message) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: config.emailUser,
+        pass: config.emailPassword,
+      },
+    });
+    const mailOptions = {
+      from: config.emailUser,
+      to: email,
+      subject: subject,
+      html:
+        "<p>Dear EMS Team,<br><br>Hi, " +
+        name + ' ' + message + '<br><br>Best regards,<br><br>EMS<br>ems@gmail.com',
+    };
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email has been sent:- ", info.response);
+      }
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 module.exports = {
   sendVerifyMail,
   sendResetPasswordMail,
-  addEmployMail
+  addEmployMail,
+  sendMailToAll
 };

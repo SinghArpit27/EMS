@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Super Admin Dashboard</title>
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="css/employees/employeeDashboard.css" />
 
     <!-- other styling link -->
@@ -39,10 +39,17 @@
           <a href="#">EM<span>S</span></a>
         </div>
         <ul class="menu">
-          <li><a href="/superAdmin/dashboard" class="menu-btn" aria-current="page">Home</a></li>
-          <li><a href="/superAdmin/organisationalUnit">OU</a></li>
-          <li><a href="/superAdmin/register" class="menu-btn">Add New Employee</a></li>
-          <li><a href="/superAdmin/sendMail" class="menu-btn">Send Mail</a></li>
+          <li>
+            <a href="/admin/dashboard" class="menu-btn" aria-current="page"
+              >Home</a
+            >
+          </li>
+          <li><a href="/admin/employsList">Employees</a></li>
+          <li>
+            <a href="/admin/register" class="menu-btn">Add New Employee</a>
+          </li>
+          <li><a href="/admin/sendMail" class="menu-btn">Send Mail</a></li>
+          <li><a href="/admin/team" class="menu-btn">My Team</a></li>
         </ul>
         <!-- <div class="profile-pic"> -->
         <img
@@ -64,7 +71,10 @@
               <h3><%= user.name %> <br />E-Code ( <%= user.empCode %> )</h3>
             </div>
             <hr />
-            <a href="/superAdmin/editProfile?id=<%= user._id %>" class="sub-menu-link">
+            <a
+              href="/admin/editProfile?id=<%= user._id %>"
+              class="sub-menu-link"
+            >
               <i class="fa fa-user" aria-hidden="true"></i>
               <p>Edit Profile</p>
               <!-- <span>></span> -->

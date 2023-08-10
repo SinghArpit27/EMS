@@ -179,10 +179,50 @@ const loadAdminsList = async (req,res) => {
         const employeeData = await Employee.findById({ _id: employeeId });
 
 
-        // Get Admins data
-        const adminData = await Employee.find({role:2});
 
-        res.render("admins", { user: employeeData, admins: adminData });
+        // Get Admins data
+        var search = '';
+        if(req.query.search){
+            search = req.query.search;
+        }
+
+        var page = 1;
+        if(req.query.page){
+            page = req.query.page;
+        }
+
+        const limit = 5;
+        const adminData = await Employee.find({
+            role:2,
+            $or:[
+                { name: { $regex: '.*' + search + '.*', $options:'i' } },
+                { email: { $regex: '.*' + search + '.*', $options:'i' } },
+                { phone: { $regex: '.*' + search + '.*', $options:'i' } },
+                { empCode: { $regex: '.*' + search + '.*', $options:'i' } }
+            ]
+        })
+        .limit(limit * 1)
+        .skip((page - 1) * limit)
+        .exec();
+
+        const count = await Employee.find({
+            role:2,
+            $or:[
+                { name: { $regex: '.*' + search + '.*', $options:'i' } },
+                { email: { $regex: '.*' + search + '.*', $options:'i' } },
+                { phone: { $regex: '.*' + search + '.*', $options:'i' } },
+                { empCode: { $regex: '.*' + search + '.*', $options:'i' } }
+            ]
+        }).countDocuments();
+
+        res.render("admins", {
+            user: employeeData,
+            admins: adminData,
+            totalPages: Math.ceil(count/limit),
+            currentPage: page,
+            next:page+1,
+            previous:page-1
+        });
 
     } catch (error) {
         console.log(error.message);
@@ -199,11 +239,52 @@ const loadEmploysList = async (req,res) => {
         const employeeId = decodeToken(token);
         const employeeData = await Employee.findById({ _id: employeeId });
 
+        // Get Employs Data
+        var search = '';
+        if(req.query.search){
+            search = req.query.search;
+        }
 
-        // Get Admins data
-        const employData = await Employee.find({role:3});
+        var page = 1;
+        if(req.query.page){
+            page = req.query.page;
+        }
 
-        res.render("employs", { user: employeeData, employs: employData });
+        const limit = 5;
+        const employData = await Employee.find({
+            role:3,
+            $or:[
+                { name: { $regex: '.*' + search + '.*', $options:'i' } },
+                { email: { $regex: '.*' + search + '.*', $options:'i' } },
+                { phone: { $regex: '.*' + search + '.*', $options:'i' } },
+                { empCode: { $regex: '.*' + search + '.*', $options:'i' } }
+            ]
+        })
+        .limit(limit * 1)
+        .skip((page - 1) * limit)
+        .exec();
+
+
+        const count = await Employee.find({
+            role:3,
+            $or:[
+                { name: { $regex: '.*' + search + '.*', $options:'i' } },
+                { email: { $regex: '.*' + search + '.*', $options:'i' } },
+                { phone: { $regex: '.*' + search + '.*', $options:'i' } },
+                { empCode: { $regex: '.*' + search + '.*', $options:'i' } }
+            ]
+        }).countDocuments();
+
+
+
+        res.render("employs", {
+            user: employeeData,
+            employs: employData,
+            totalPages: Math.ceil(count/limit),
+            currentPage: page,
+            next:page+1,
+            previous:page-1
+        });
 
     } catch (error) {
         console.log(error.message);
@@ -304,7 +385,7 @@ const exportEmploys = async (req,res) => {
     }
 }
 
-const sendMail = async (req,res) => {
+const loadSendMail = async (req,res) => {
     try {
 
         const token = req.cookies.EMS_Token;
@@ -315,6 +396,62 @@ const sendMail = async (req,res) => {
         const employeeData = await Employee.findById({ _id: employeeId });
 
         res.render('mail', {user: employeeData});
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const sendMail = async (req,res) => {
+    try {
+
+        const token = req.cookies.EMS_Token;
+        if (!token) {
+            res.render('unauthorizedError', {message: "You are Unauthorized"});
+        }
+        const employeeId = decodeToken(token);
+        const employeeData = await Employee.findById({ _id: employeeId });
+
+
+
+        const subject = req.body.subject;
+        const message = req.body.message;
+
+        const employData = await Employee.find({});
+
+        if(employData) {
+            for(let i = 0; i < employData.length; i++){
+            mailService.sendMailToAll(employData[i].name, employData[i].email, subject, message)
+            }
+        }else{
+            res.render('mail', { user: employeeData, message: "Employs Not Found" });
+        }
+        res.render('mail', { user: employeeData, message: "Message sent successfully done" });
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const logout = async (req,res) => {
+    try {
+        
+        res.clearCookie("EMS_Token");
+        res.redirect('/login');
+
+        // console.log("Logout done");
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const deleteEmploy = async (req,res) => {
+    try {
+        
+        const id = req.query.id;
+        await Employee.deleteOne({ _id: id });
+        res.redirect('/superAdmin/organisationalUnit');
 
     } catch (error) {
         console.log(error.message);
@@ -333,6 +470,9 @@ module.exports = {
     loadEditEmploy,
     updateEmployProfile,
     exportEmploys,
-    sendMail
+    loadSendMail,
+    sendMail,
+    logout,
+    deleteEmploy
     
 }

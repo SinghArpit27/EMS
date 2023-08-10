@@ -3,7 +3,7 @@
 }
 
 .table-container{
-    width: 95%;
+    width: 100%;
     margin: 0 auto;
 }
   @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap');
@@ -19,7 +19,7 @@
   }
   
   .table_responsive {
-      max-width: 1280px;
+      max-width: 1320px;
       border: 1px solid #00bcd4;
       background-color: #efefef33;
       padding: 15px;

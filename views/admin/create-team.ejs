@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Super Admin Dashboard</title>
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" href="css/employees/employeeDashboard.css" />
     <link rel="stylesheet" href="css/superAdmin/adminAndEmploy.css" />
 
@@ -96,15 +96,15 @@
         </div>
         <ul class="menu">
           <li>
-            <a href="/superAdmin/dashboard" class="menu-btn" aria-current="page"
+            <a href="/admin/dashboard" class="menu-btn" aria-current="page"
               >Home</a
             >
           </li>
-          <li><a href="/superAdmin/organisationalUnit">OU</a></li>
+          <li><a href="/admin/employsList">Employees</a></li>
           <li>
-            <a href="/superAdmin/register" class="menu-btn">Add New Employee</a>
+            <a href="/admin/register" class="menu-btn">Add New Employee</a>
           </li>
-          <li><a href="/superAdmin/sendMail" class="menu-btn">Send Mail</a></li>
+          <li><a href="/admin/sendMail" class="menu-btn">Send Mail</a></li>
         </ul>
         <!-- <div class="profile-pic"> -->
         <img
@@ -127,7 +127,7 @@
             </div>
             <hr />
             <a
-              href="/superAdmin/editProfile?id=<%= user._id %>"
+              href="/admin/editProfile?id=<%= user._id %>"
               class="sub-menu-link"
             >
               <i class="fa fa-user" aria-hidden="true"></i>
@@ -159,7 +159,8 @@
 
     <!-- home/hero section -->
     <section class="home-container" id="home-container">
-      <h1 class="title">Admins List</h1>
+      <h1 class="title">Employees List</h1>
+
       <div class="table-container">
         <div class="table_responsive">
           <form action="" id="search-form">
@@ -183,49 +184,37 @@
                 <th>Employee Code</th>
                 <th>Phone</th>
                 <th>Job Title</th>
-                <th>Role</th>
                 <th>Verified</th>
-                <th>Edit</th>
-                <th>Lock</th>
-                <th>Delete</th>
+                <th>Add</th>
               </tr>
             </thead>
 
-            <% if(admins.length > 0){ for(let i = 0; i < admins.length; i++){
+            <% if(employs.length > 0){ for(let i = 0; i < employs.length; i++){
             let count = i + 1; %>
             <tbody>
               <tr>
                 <td><%= count %></td>
                 <td>
                   <img
-                    src="uploads/superAdminImages/<%= admins[i].empImg %>"
+                    src="uploads/superAdminImages/<%= employs[i].empImg %>"
                     alt=""
                     id="profile-pic"
                   />
                 </td>
-                <td><%= admins[i].name %></td>
-                <td><%= admins[i].email%></td>
-                <td><%= admins[i].empCode %></td>
-                <td><%= admins[i].phone %></td>
-                <td><%= admins[i].empJobTitle %></td>
-                <td><%= admins[i].role %></td>
-                <td><%= admins[i].is_varified %></td>
+                <td><%= employs[i].name %></td>
+                <td><%= employs[i].email%></td>
+                <td><%= employs[i].empCode %></td>
+                <td><%= employs[i].phone %></td>
+                <td><%= employs[i].empJobTitle %></td>
+                <% if(employs[i].is_varified == 0){ %>
+                <td>Not Verified</td>
+                <% }else{ %>
+                <td>Verified</td>
+                <% } %>
                 <td>
                   <span class="action_btn">
-                    <a href="/superAdmin/edit-employ?id=<%= admins[i]._id %>"
-                      >Edit</a
-                    >
-                  </span>
-                </td>
-                <td>
-                  <span class="action_btn">
-                    <a href="#">Lock</a>
-                  </span>
-                </td>
-                <td>
-                  <span class="action_btn">
-                    <a href="/superAdmin/delete-employ?id=<%= admins[i]._id %>"
-                      >Delete</a
+                    <a href="/admin/createTeam?id=<%= employs[i]._id %>"
+                      >Add</a
                     >
                   </span>
                 </td>
@@ -246,21 +235,6 @@
             <% } %>
           </div>
 
-          <!-- <% if (currentPage > 1) { %>
-            <a href="?page=<%= currentPage - 1 %>">Previous</a>
-          <% } %>
-          
-          <%
-            for (let j = 1; j <= totalPages; j++) {
-          %>
-            <a href="?page=<%= j %>"><%= j %></a>
-          <%
-            }
-          %>
-          
-          <% if (currentPage < totalPages) { %>
-            <a href="?page=<%= currentPage + 1 %>">Next</a>
-          <% } %> -->
         </div>
       </div>
     </section>
