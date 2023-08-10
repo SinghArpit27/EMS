@@ -40,11 +40,7 @@
           <a href="#">EM<span>S</span></a>
         </div>
         <ul class="menu">
-          <li>
-            <a href="/superAdmin/dashboard" class="menu-btn" aria-current="page"
-              >Home</a
-            >
-          </li>
+          <li><a href="/superAdmin/dashboard" class="menu-btn" aria-current="page">Home</a></li>
           <li><a href="/superAdmin/organisationalUnit">OU</a></li>
           <li><a href="/superAdmin/register" class="menu-btn">Add New Employee</a></li>
           <li><a href="/superAdmin/sendMail" class="menu-btn">Send Mail</a></li>
@@ -69,10 +65,7 @@
               <h3><%= user.name %> <br />E-Code ( <%= user.empCode %> )</h3>
             </div>
             <hr />
-            <a
-              href="/superAdmin/editProfile?id=<%= user._id %>"
-              class="sub-menu-link"
-            >
+            <a href="/superAdmin/editProfile?id=<%= user._id %>" class="sub-menu-link">
               <i class="fa fa-user" aria-hidden="true"></i>
               <p>Edit Profile</p>
               <!-- <span>></span> -->
@@ -102,76 +95,8 @@
 
     <!-- home/hero section -->
     <section class="home-container" id="home-container">
-      <h1 class="title">Employees List</h1>
-      
-      <div class="table-container">
-        <div class="table_responsive">
-          <table>
-            <thead>
-              <tr>
-                <th>Sl</th>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Employee Code</th>
-                <th>Phone</th>
-                <th>Job Title</th>
-                <th>Role</th>
-                <th>Verified</th>
-                <th>Edit</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
+      <h1 class="title">Send Mail To All Employees</h1>
 
-            <% if(employs.length > 0){ for(let i = 0; i < employs.length; i++){
-              let count = i + 1;
-            %>
-            <tbody>
-              <tr>
-                <td> <%= count %> </td>
-                <td>
-                  <img
-                    src="uploads/superAdminImages/<%= employs[i].empImg %>"
-                    alt=""
-                    id="profile-pic"
-                  />
-                </td>
-                <td><%= employs[i].name %></td>
-                <td><%= employs[i].email%></td>
-                <td><%= employs[i].empCode %></td>
-                <td><%= employs[i].phone %></td>
-                <td><%= employs[i].empJobTitle %></td>
-                <td><%= employs[i].role %></td>
-                <% if(employs[i].is_varified == 0){
-                  %>
-                    <td>Not Verified</td>
-                  <%
-                }else{
-                  %>
-                    <td>Verified</td>
-                  <%
-                }
-                %>
-                <td>
-                  <span class="action_btn">
-                    <a href="/superAdmin/edit-employ?id=<%= employs[i]._id %>">Edit</a>
-                  </span>
-                </td>
-                <td>
-                  <span class="action_btn">
-                    <a href="#">Lock</a>
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-            <% } }else{ %>
-            <tr>
-              <td colspan="10">User Not Found</td>
-            </tr>
-            <% } %>
-          </table>
-        </div>
-      </div>
     </section>
 
     <script src="js/employees/home.js"></script>

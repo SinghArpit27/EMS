@@ -42,8 +42,8 @@
         <ul class="menu">
           <li><a href="/superAdmin/dashboard" class="menu-btn" aria-current="page">Home</a></li>
           <li><a href="/superAdmin/organisationalUnit">OU</a></li>
-          <li><a href="#" class="menu-btn">About</a></li>
-          <li><a href="#" class="menu-btn">Contact</a></li>
+          <li><a href="/superAdmin/register" class="menu-btn">Add New Employee</a></li>
+          <li><a href="/superAdmin/sendMail" class="menu-btn">Send Mail</a></li>
         </ul>
         <!-- <div class="profile-pic"> -->
         <img
@@ -119,10 +119,11 @@
                         if(admins.length > 0){
 
                             for(let i = 0; i < admins.length; i++){
+                              let count = i + 1;
                                 %>
                                     <tbody>
                                         <tr>
-                                            <td>01</td>
+                                            <td><%= count %></td>
                                             <td><img src="uploads/superAdminImages/<%= admins[i].empImg %>" alt="" id="profile-pic"></td>
                                             <td><%= admins[i].name %></td>
                                             <td><%= admins[i].email%></td>
@@ -133,7 +134,7 @@
                                             <td><%= admins[i].is_varified %></td>
                                             <td>
                                                 <span class="action_btn">
-                                                    <a href="#">Edit</a>
+                                                    <a href="/superAdmin/edit-employ?id=<%= admins[i]._id %>">Edit</a>
                                                 </span>
                                             </td>
                                             <td>

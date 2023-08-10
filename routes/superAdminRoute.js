@@ -35,13 +35,10 @@ const upload = multer({storage:storage});
 
 // import employeeController
 const superAdminController = require('../controllers/superAdminController');
+
 // Register Route
 superAdminRoute.get('/register', superAdminController.loadRegister);
 superAdminRoute.post('/register', upload.single('image'), employeeValidation.registerValidation, superAdminController.insertEmployee);
-
-// login Route
-superAdminRoute.get('/', superAdminController.loginLoad);
-superAdminRoute.post('/', superAdminController.verifyLogin);
 
 // // Forget password
 // superAdminRoute.get('/forgetPassword', superAdminController.loadForgetPassword);
@@ -60,6 +57,21 @@ superAdminRoute.post('/editProfile', upload.single('image'), superAdminControlle
 superAdminRoute.get('/organisationalUnit', auth, superAdminController.loadOU);
 superAdminRoute.get('/adminsList', auth, superAdminController.loadAdminsList);
 superAdminRoute.get('/employsList', auth, superAdminController.loadEmploysList);
+
+// Update Employe Route
+superAdminRoute.get('/edit-employ', superAdminController.loadEditEmploy);
+superAdminRoute.post('/edit-employ', superAdminController.updateEmployProfile);
+
+// Export Users 
+superAdminRoute.get('/export-employs', superAdminController.exportEmploys);
+
+// Send Mail Route
+superAdminRoute.get('/sendMail', superAdminController.sendMail);
+
+superAdminRoute.get('*', (req,res) => {
+    res.redirect('/superAdmin/dashboard');
+});
+
 
 
 module.exports = superAdminRoute;

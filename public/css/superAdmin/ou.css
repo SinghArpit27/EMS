@@ -5,14 +5,14 @@
 
 .card-container{
     /* border: 1px solid red; */
-    width: 60%;
+    width: 90%;
     margin: auto;
     display: flex;
     justify-content: space-between;
 }
 .card-wrap{
-    width: 42%;
-    height: 11.7rem;
+    width: 30%;
+    height: 10rem;
     background: linear-gradient(81.67deg, #0084f4 0%, #1a4da2 100%);
     display: flex;
     align-items: center;
@@ -24,6 +24,6 @@
     justify-content: center;
     font-size: 2rem;
     font-weight: 700;
-    gap: 1rem;
+    gap: 2rem;
     color: #fff;
 }

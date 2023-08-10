@@ -56,14 +56,14 @@ var registerValidation = [
 
 
   /*------------validation for password--------------*/
-  check("password")
-    .not()
-    .isEmpty()
-    .trim()
-    .withMessage("Enter Password")
-    .bail()
-    .isLength({ min: 4 })
-    .withMessage("Password must 4 characters"),
+  // check("password")
+  //   .not()
+  //   .isEmpty()
+  //   .trim()
+  //   .withMessage("Enter Password")
+  //   .bail()
+  //   .isLength({ min: 4 })
+  //   .withMessage("Password must 4 characters"),
 
   /*------------validation for Confirm password--------------*/
   // check("confirm_password").custom(async (value, { req }) => {

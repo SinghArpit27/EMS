@@ -7,50 +7,6 @@ const { createToken, decodeToken } = require('../util/feature');
 const randomstring = require('randomstring');
 
 
-const loadRegister = async (req,res) => {
-    try {
-        
-        res.render('register');
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-const insertEmployee = async (req,res) => {
-    try {
-
-        const data = validationResult(req);
-            const errors = data.errors;
-            if (errors.length > 0) {
-                res.render('register', {errors: errors})
-            }
-        else{
-            const spassword = await bcrypt.hash(req.body.password, 10);
-            const employee = await new Employee({
-                name: req.body.name,
-                email: req.body.email,
-                empCode: req.body.empCode,
-                phone: req.body.phone,
-                empImg: req.file.filename,
-                empJobTitle: req.body.empJobTitle,
-                password: spassword
-            });
-            // const token = await employee.createToken(employee._id);
-            const empData = await employee.save();
-            if(empData){
-                // sendVerifyMail(req.body.name, req.body.email, empData._id);
-                mailService.sendVerifyMail(req.body.name, req.body.email, empData._id);
-                res.render('register', { message: "Registration done Successfully, Please Verify" });
-            }else{
-                res.render('register', { message: "Registration Failed" });
-            }
-            
-        }
-    } catch (error) {
-        console.log(error.message);
-    }
-}
 
 const verifyMail = async (req, res) => {
     try {
@@ -85,15 +41,38 @@ const verifyLogin = async (req,res) => {
 
             // if password is matched then we check mail is verified or not
             if (employeeData.is_varified === 1) {
-                if(employeeData.role === 3){
+                if(employeeData.role === 1){
                     // JWT Authentication logic
                     const token = await createToken(employeeData);
                     res.cookie("EMS_Token", token, {
                         httpOnly: true
-                        // maxAge: 15 * 60 * 1000,
+                    });
+                    res.redirect('/superAdmin/dashboard');
+                }
+                else if(employeeData.role === 2){
+                    // JWT Authentication logic
+                    const token = await createToken(employeeData);
+                    res.cookie("EMS_Token", token, {
+                        httpOnly: true
+                    });
+                    res.redirect('/admin/dashboard');
+                }
+                else if(employeeData.role === 3){
+                    // JWT Authentication logic
+                    const token = await createToken(employeeData);
+                    res.cookie("EMS_Token", token, {
+                        httpOnly: true
                     });
                     res.redirect('/dashboard');
-                }else{
+                }
+                
+                
+                
+                
+                
+                
+                
+                else{
                     res.render('login', { message: "Login Details are incorrect" });
                 }
             } else {              
@@ -324,8 +303,6 @@ const emailVerificationLink = async (req,res) => {
 
 
 module.exports = {
-    loadRegister,
-    insertEmployee,
     verifyMail,
     loginLoad,
     verifyLogin,

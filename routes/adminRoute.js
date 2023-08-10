@@ -39,16 +39,12 @@ const adminController = require('../controllers/adminController');
 // superAdminRoute.get('/register', superAdminController.loadRegister);
 // superAdminRoute.post('/register', upload.single('image'), employeeValidation.registerValidation, superAdminController.insertEmployee);
 
-// login Route
-adminRoute.get('/', adminController.loginLoad);
-adminRoute.post('/', adminController.verifyLogin);
 
 // // Forget password
 // superAdminRoute.get('/forgetPassword', superAdminController.loadForgetPassword);
 // superAdminRoute.post('/forgetPassword', superAdminController.resetPassword);
 // superAdminRoute.get('/forget-password', superAdminController.resetPasswordLoad);
 // superAdminRoute.post('/forget-password', superAdminController.verifyresetPassword);
-
 
 
 // // Dashboard Route

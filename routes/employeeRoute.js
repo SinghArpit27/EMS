@@ -37,10 +37,6 @@ const upload = multer({storage:storage});
 // import employeeController
 const employeeController = require('../controllers/employeeController');
 
-// Register Route
-employRoute.get('/register', employeeController.loadRegister);
-employRoute.post('/register', upload.single('image'), employeeValidation.registerValidation, employeeController.insertEmployee);
-
 // Verify Employee Route
 employRoute.get('/verify',employeeController.verifyMail);
 // resend verification mail

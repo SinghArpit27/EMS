@@ -10,12 +10,12 @@ const sendVerifyMail = async (name, email, user_id) => {
         secure: false,
         requireTLS: true,
         auth: {
-          user: "singharpit0027@gmail.com",
-          pass: 'zwfduqwqohwnblsy',
+          user: config.emailUser,
+          pass: config.emailPassword,
         },
       });
       const mailOptions = {
-        from: "singharpit0027@gmail.com",
+        from: config.emailUser,
         to: email,
         subject: "Verification mail",
         html:
@@ -36,7 +36,6 @@ const sendVerifyMail = async (name, email, user_id) => {
       console.log(error.message);
     }
 };
-
 
 const sendResetPasswordMail = async (name, email, token) => {
   try {
@@ -72,7 +71,44 @@ const sendResetPasswordMail = async (name, email, token) => {
     console.log(error.message);
   }
 };
+
+const addEmployMail = async (name, email, password, user_id) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: config.emailUser,
+        pass: config.emailPassword,
+      },
+    });
+    const mailOptions = {
+      from: config.emailUser,
+      to: email,
+      subject: "Onboarding Mail",
+      html:
+        "<p>Hi " +
+        name +
+        ', please click here to <a href="http://localhost:5000/verify?id=' +
+        user_id +
+        '"> Login </a> your Dashboard.</p> <br><br>Your Credentials <br><b>Email:- </b>' + email + ' <br><b>Password:- </b>' + password + ' <br><br>Thank You',
+    };
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email has been sent:- ", info.response);
+      }
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 module.exports = {
   sendVerifyMail,
-  sendResetPasswordMail
+  sendResetPasswordMail,
+  addEmployMail
 };
