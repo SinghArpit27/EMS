@@ -21,7 +21,7 @@ const path = require("path");
 superAdminRoute.use(express.static('public'));
 const storage = multer.diskStorage({
     destination:function(req,file,cb){
-            cb(null,path.join(__dirname, '../public/uploads/superAdminImages'));
+            cb(null,path.join(__dirname, '../public/uploads/employeeImages'));
         },
         filename:function(req,file,cb){
             const name = Date.now()+'-'+file.originalname;

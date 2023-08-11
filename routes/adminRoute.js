@@ -41,6 +41,13 @@ adminRoute.get('/register', adminController.loadRegister);
 adminRoute.post('/register', upload.single('image'), employeeValidation.registerValidation, adminController.insertEmployee);
 
 
+// Forget password
+adminRoute.get('/forgetPassword', adminController.loadForgetPassword);
+adminRoute.post('/forgetPassword', adminController.resetPassword);
+adminRoute.get('/forget-password', adminController.resetPasswordLoad);
+adminRoute.post('/forget-password', adminController.verifyresetPassword);
+
+
 // Dashboard Route
 adminRoute.get('/dashboard', auth, adminController.loadDashboard);
 adminRoute.get('/editProfile', auth, adminController.editProfileLoad);
@@ -64,15 +71,16 @@ adminRoute.get('/logout', auth, adminController.logout);
 
 // Delete Employ Route
 adminRoute.get('/delete-employ', adminController.deleteEmploy);
-adminRoute.get('/create-team', adminController.loadCreateTeam);
-adminRoute.get('/createTeam', adminController.createTeam);
-
-
-
-
 
 // team creation
 adminRoute.get('/team', adminController.loadTeam);
+adminRoute.post('/team', adminController.insertTeamDetails);
+
+
+// Team Route
+adminRoute.get('/create-team', adminController.loadCreateTeam);
+adminRoute.post('/create-team', adminController.createTeam);
+adminRoute.get('/createTeam/:id', adminController.assignTeam);
 
 
 

@@ -1,4 +1,5 @@
 const Employee = require('../models/employeeSchema');
+const Team = require('../models/teamSchema');
 const bcrypt = require('bcrypt');
 const { check, validationResult } = require("express-validator");
 const mailService = require('../helpers/employeeVerification');
@@ -153,7 +154,7 @@ const loadEmploysList = async (req,res) => {
             page = req.query.page;
         }
 
-        const limit = 5;
+        const limit = 4;
 
         const employData = await Employee.find({
             role:3,
@@ -317,8 +318,41 @@ const loadTeam = async (req,res) => {
         }
         const employeeId = decodeToken(token);
         const employeeData = await Employee.findById({ _id: employeeId });
+        const teamID = employeeData.teamID;
+
+        if(employeeData.teamID !== ''){
+
+            const teamData = await Employee.find({ teamID: teamID })
+            res.render('team', {teamData: teamData, user: employeeData});
+        }
+
 
         res.render('team', {user: employeeData});
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const insertTeamDetails = async (req,res) => {
+    try {
+
+        const token = req.cookies.EMS_Token;
+        if (!token) {
+            res.render('unauthorizedError', {message: "You are Unauthorized"});
+        }
+        const employeeId = decodeToken(token);
+        const employeeData = await Employee.findById({ _id: employeeId });
+
+        // const teamName = req.body.teamName;
+        // const team = await new Team({
+        //     teamName: teamName,
+        //     employeesID: employeeId,
+        // });
+        // const teamData = await team.save();
+        // const employData = await employeeData.teamName
+
+        res.redirect('/admin/create-team');
 
     } catch (error) {
         console.log(error.message);
@@ -391,9 +425,48 @@ const loadCreateTeam = async (req,res) => {
 
 const createTeam = async (req,res) => {
     try {
-        const employID = req.query.id;
-        console.log(employID);
-        res.redirect('/admin/create-team');
+        const token = req.cookies.EMS_Token;
+        if (!token) {
+            res.render('unauthorizedError', {message: "You are Unauthorized"});
+        }
+        const employeeId = decodeToken(token);
+        const employeeData = await Employee.findById({ _id: employeeId });
+
+        const teamName = req.body.teamName;
+        
+
+        const team = await new Team({
+            teamName: teamName,
+            employeesID: employeeId,
+        });
+        const teamData = await team.save();
+
+        team.employeesID.push(employId)
+        await team.save();
+
+
+
+    //     const employ = await Team.findById(userId);
+
+
+        res.redirect('/admin/team');
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const assignTeam = async (req,res) => {
+    try {
+        const employId = req.params.id;
+        const team = await new Team({
+            teamName: teamName,
+            employeesID: employeeId,
+        });
+        const teamData = await team.save();
+
+        team.employeesID.push(employId)
+        await team.save();
+
     } catch (error) {
         console.log(error.message);
     }
@@ -401,6 +474,83 @@ const createTeam = async (req,res) => {
 
 
 
+
+
+
+
+
+const loadForgetPassword = async (req,res) => {
+    try {
+        
+        res.render('forgetPassword');
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const resetPassword = async (req,res) => {
+    try {
+        
+        const email = req.body.email;
+        const employData = await Employee.findOne({ email: email });
+        if(employData){
+            if(employData.is_varified === 0){
+                res.render('forgetPassword', { message: "Your Email is not varified, please very your email" });
+            }else{
+                const randomString = randomstring.generate();
+                const updatedData = await Employee.updateOne(
+                    { email: email },
+                    { $set:{ token: randomString } }
+                );
+                mailService.sendResetPasswordMail(employData.name, employData.email, randomString);
+                res.render('forgetPassword', {message: "Please check your mail to Reset Password"});
+            }
+        }else{
+            res.render('forgetPassword', { message: "Email is incorrect" });
+        }
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const resetPasswordLoad = async (req,res) =>{
+    try {
+        
+        const token = req.query.token;
+        const employData = await Employee.findOne({ token: token });
+        if(employData){
+
+            res.render('resetPassword', { employ_id: employData._id });
+
+        }else{
+            res.render('notFound', {message: "Invalid token"});
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const verifyresetPassword = async (req,res) => {
+    try {
+        
+        const password = req.body.password;
+        const employ_id = req.body.employ_id;
+
+        const spassword = await bcrypt.hash(password, 10);
+
+        const updatedData = await Employee.findByIdAndUpdate(
+            { _id: employ_id },
+            { $set: { password: spassword, token: "" } }
+        );
+        res.redirect('/login');
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 module.exports = {
     loadRegister,
@@ -416,6 +566,12 @@ module.exports = {
     logout,
     deleteEmploy,
     loadTeam,
+    insertTeamDetails,
     loadCreateTeam,
-    createTeam
+    createTeam,
+    assignTeam,
+    loadForgetPassword,
+    resetPassword,
+    resetPasswordLoad,
+    verifyresetPassword
 }

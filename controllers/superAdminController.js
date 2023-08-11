@@ -191,7 +191,7 @@ const loadAdminsList = async (req,res) => {
             page = req.query.page;
         }
 
-        const limit = 5;
+        const limit = 4;
         const adminData = await Employee.find({
             role:2,
             $or:[
@@ -250,7 +250,7 @@ const loadEmploysList = async (req,res) => {
             page = req.query.page;
         }
 
-        const limit = 5;
+        const limit = 4;
         const employData = await Employee.find({
             role:3,
             $or:[

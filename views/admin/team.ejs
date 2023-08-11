@@ -52,7 +52,7 @@
           <li><a href="/admin/sendMail" class="menu-btn">Send Mail</a></li>
         </ul>
         <img
-          src="uploads/superAdminImages/<%= user.empImg %>"
+          src="uploads/employeeImages/<%= user.empImg %>"
           alt="<%= user.empImg %>"
           class="profile-pic"
           onclick="toggleMenu()"
@@ -61,7 +61,7 @@
           <div class="sub-menu">
             <div class="user-info">
               <img
-                src="uploads/superAdminImages/<%= user.empImg %>"
+                src="uploads/employeeImages/<%= user.empImg %>"
                 class="profile-pic"
               />
               <h3><%= user.name %> <br />E-Code ( <%= user.empCode %> )</h3>
@@ -97,9 +97,41 @@
 
     <!-- home/hero section -->
     <section class="home-container" id="home-container">
-        <h1 class="title">My team</h1>
-        <br>
-        <a href="/admin/create-team">Create Team</a>
+      <h1 class="title">My team</h1>
+      <br />
+
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+        </tr>
+        <% if (typeof teamData !== 'undefined' && teamData.length > 0) { %>
+          <% teamData.forEach(function (employ) { %>
+              <tr>
+                <td><%= employ.name %></td>
+                <td><%= employ.email %></td>
+                <td><%= employ.phone %></td>
+              </tr>
+          <% }); %>
+        <% } else { %>
+            <tr>
+
+              <td colspan="3"><a href="/admin/create-team">Create Team</a></td>
+
+
+              <!-- <td colspan="3"><a href="/admin/create-team?id=<%= user._id %>">Create Team</a></td> -->
+              <!-- <td colspan="3">
+                <form action="" method="post">
+                  <input type="text" placeholder="Enter Team Name" name="teamName">
+                  <input type="submit" value="Add Employee">
+                </form>
+              </td> -->
+            </tr>
+        <% } %>
+    </table>
+    
+      
     </section>
 
     <script src="js/employees/home.js"></script>
