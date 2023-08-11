@@ -75,6 +75,16 @@ superAdminRoute.get('/logout', auth, superAdminController.logout);
 // Delete Employ Route
 superAdminRoute.get('/delete-employ', superAdminController.deleteEmploy);
 
+// teams Route
+superAdminRoute.get('/teams', superAdminController.loadTeams);
+// Route for deleting a team
+superAdminRoute.post('/delete-team/:teamId', superAdminController.deleteTeam);
+
+
+// Route for team creation
+superAdminRoute.get('/create-team', superAdminController.loadCreateTeam);
+superAdminRoute.post('/create-team', superAdminController.createTeam);
+
 superAdminRoute.get('*', (req,res) => {
     res.redirect('/superAdmin/dashboard');
 });

@@ -1,4 +1,5 @@
 const Employee = require('../models/employeeSchema');
+const Team = require('../models/teamSchema');
 const bcrypt = require('bcrypt');
 const { check, validationResult } = require("express-validator");
 const mailService = require('../helpers/employeeVerification');
@@ -458,6 +459,117 @@ const deleteEmploy = async (req,res) => {
     }
 }
 
+const loadTeams = async (req,res) => {
+    try {
+
+        // Fetch admins and employees from the database
+        const admins = await Employee.find({ role: 2 });
+        const employees = await Employee.find({ role: 3 });
+
+        // Fetch list of teams
+        const teams = await Team.find();
+
+        // Render the EJS template with the fetched data
+        res.render('teams', { admins, employees, teams });
+
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+const loadCreateTeam = async (req,res) => {
+    try {
+        
+        const token = req.cookies.EMS_Token;
+        if (!token) {
+            res.render('unauthorizedError', {message: "You are Unauthorized"});
+        }
+        const employeeId = decodeToken(token);
+        const employeeData = await Employee.findById({ _id: employeeId });
+        const teamID = employeeData.teamID;
+
+
+        // Fetch admins and employees from the database
+        const admins = await Employee.find({ role: 2 }); // Assuming role 2 is for admins
+        const employees = await Employee.find({ role: 3 }); // Assuming role 3 is for employees
+
+        // Render the EJS template with the fetched data
+        res.render('create-team', { admins, employees, user: employeeData});
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const createTeam = async (req,res) => {
+    try {
+        const { teamName, projectManagerId, memberIds } = req.body;
+
+
+        // Check if the team name is unique
+        const existingTeam = await Team.findOne({ name: teamName });
+        if (existingTeam) {
+            return res.render('create-team', { message: 'Team name already exists' });
+        }
+
+        // Create the team
+        const newTeam = await Team.create({
+            name: teamName,
+            projectManager: projectManagerId,
+            members: memberIds
+        });
+
+        await newTeam.save();
+
+        // Update the employee documents to reference the team
+        await Employee.updateMany(
+            { _id: { $in: [projectManagerId, ...memberIds] } },
+            { $set: { teamID: newTeam._id, teamName: teamName } }
+        );
+
+        res.redirect('/superAdmin/dashboard'); // Redirect to admin dashboard
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const deleteTeam = async (req,res) => {
+    try {
+
+
+        const teamId = req.params.teamId;
+
+        // Find the team by ID
+        const team = await Team.findById(teamId);
+
+        // if (!team) {
+        //     return res.status(404).send('Team not found');
+        // }
+
+        // Update employees' team information
+        await Employee.updateMany(
+            { _id: { $in: [...team.members, team.projectManager] } },
+            { $set: { teamID: '', teamName: '' } }
+        );
+
+        // Delete the team
+        await Team.findByIdAndDelete(teamId);
+
+
+
+        res.redirect('/superAdmin/dashboard'); // Redirect to admin dashboard
+
+
+
+
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
 module.exports = {
     loadRegister,
     insertEmployee,
@@ -473,6 +585,10 @@ module.exports = {
     loadSendMail,
     sendMail,
     logout,
-    deleteEmploy
+    deleteEmploy,
+    loadTeams,
+    loadCreateTeam,
+    createTeam,
+    deleteTeam
     
 }

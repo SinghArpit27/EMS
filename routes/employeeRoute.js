@@ -69,4 +69,9 @@ employRoute.get('/logout', auth, employeeController.logout);
 // Errors Route
 employRoute.get('/errorUna', employeeController.loadUnauthorizedError);
 
+
+// Route to display employee portal
+employRoute.get('/employee-portal/:employeeId', employeeController.loadEmployPortal);
+employRoute.get('/employee-portal/:employeeId', employeeController.loadEmployPortal2);
+
 module.exports = employRoute;

@@ -1,0 +1,15 @@
+<a href="/superAdmin/create-team" class="menu-btn">Create New Team</a>
+
+
+<h1>Teams</h1>
+<!-- Display list of teams -->
+<ul>
+    <% for (const team of teams) { %>
+        <li>
+            <%= team.name %>
+            <form action="/superAdmin/delete-team/<%= team._id %>" method="post">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    <% } %>
+</ul>

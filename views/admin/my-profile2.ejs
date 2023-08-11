@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Employee Dashboard</title>
-    <link rel="stylesheet" href="css/employees/employeeDashboard.css" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/employees/employeeDashboard.css" />
+    <link rel="stylesheet" href="/css/employees/myProfile.css" />
 
     <!-- other styling link -->
 
@@ -40,19 +41,19 @@
         </div>
         <ul class="menu">
           <li>
-            <a href="/dashboard" class="menu-btn" aria-current="page">Home</a>
-          </li>
-          <li><a href="/empDetails" class="menu-btn">Employee Details</a></li>
-          <li>
-            <a href="/employee-portal/<%= user._id %>" class="menu-btn"
-              >My Portal</a
+            <a href="/admin/dashboard" class="menu-btn" aria-current="page"
+              >Home</a
             >
           </li>
-          <li><a href="#" class="menu-btn">Contact</a></li>
+          <li><a href="/admin/employsList">Employees</a></li>
+          <li>
+            <a href="/admin/register" class="menu-btn">Add New Employee</a>
+          </li>
+          <li><a href="/admin/sendMail" class="menu-btn">Send Mail</a></li>
         </ul>
         <!-- <div class="profile-pic"> -->
         <img
-          src="uploads/employeeImages/<%= user.empImg %>"
+          src="/uploads/employeeImages/<%= user.empImg %>"
           alt="<%= user.empImg %>"
           class="profile-pic"
           onclick="toggleMenu()"
@@ -64,13 +65,16 @@
           <div class="sub-menu">
             <div class="user-info">
               <img
-                src="uploads/employeeImages/<%= user.empImg %>"
+                src="/uploads/employeeImages/<%= user.empImg %>"
                 class="profile-pic"
               />
               <h3><%= user.name %> <br />E-Code ( <%= user.empCode %> )</h3>
             </div>
             <hr />
-            <a href="/editProfile?id=<%= user._id %>" class="sub-menu-link">
+            <a
+              href="/admin/editProfile?id=<%= user._id %>"
+              class="sub-menu-link"
+            >
               <i class="fa fa-user" aria-hidden="true"></i>
               <p>Edit Profile</p>
               <!-- <span>></span> -->
@@ -100,28 +104,12 @@
 
     <!-- home/hero section -->
     <section class="home" id="home">
-      <!-- <input type="text"> -->
-      <div class="home-content">
-        <p class="home-title">
-          Hello! Welcome to the EMS
-          <br />
-          <!-- Free and Open-Source Projects Plateform for Students -->
-        </p>
-        <p class="home-title-des">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores,
-          atque! Dolorum voluptatum magni reiciendis pariatur, deserunt deleniti
-          explicabo repudiandae blanditiis praesentium repellat adipisci.
-          Voluptate repellendus assumenda non aperiam amet quis, totam iure
-          itaque fugiat temporibus, tempora sunt, voluptatum ducimus illo!
-        </p>
-        <a href="#"><button class="btn">Explore</button></a>
-      </div>
-      <!-- image -->
-      <div class="home-image">
-        <img src="img/home-bg.png" alt="home-image" />
-      </div>
+        <div class="card" style="display: flex; align-items: center; justify-content: center; flex-flow: column; gap: 2rem;">
+            <h1 id="welcome" style="color: #111;">Welcome to Your Employee Portal</h1>
+            <h3 style="color: #475BE8;">You are not a part of any team.</h3>
+        </div>
     </section>
 
-    <script src="js/employees/home.js"></script>
+    <script src="/js/employees/home.js"></script>
   </body>
 </html>

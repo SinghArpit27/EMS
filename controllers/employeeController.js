@@ -1,4 +1,5 @@
 const Employee = require('../models/employeeSchema');
+const Team = require('../models/teamSchema');
 const bcrypt = require('bcrypt');
 const { check, validationResult } = require("express-validator");
 const mailService = require('../helpers/employeeVerification');
@@ -300,6 +301,46 @@ const emailVerificationLink = async (req,res) => {
 
 }
 
+const loadEmployPortal = async (req,res) => {
+    try {
+        
+
+
+        const employeeId = req.params.employeeId;
+
+        // Find the employee by ID
+        const employee = await Employee.findById(employeeId);
+
+        if (!employee) {
+            res.render('my-profile', { message: "Not Found ", employee, teamInfo, user: employee });
+        }
+
+        // Find the team information for the employee's teamID
+        let teamInfo = null;
+        if (employee.teamID) {
+            teamInfo = await Team.findById(employee.teamID)
+            .populate('members', 'name empCode empJobTitle empImg')
+            .populate('projectManager', 'name empCode empJobTitle empImg');
+            res.render('my-profile', { employee, teamInfo, user: employee });
+
+        }else{
+            res.render('my-profile2', { user: employee });
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const loadEmployPortal2 = async (req,res) => {
+    try {
+        
+        res.render('my-profile2');
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 module.exports = {
@@ -317,5 +358,7 @@ module.exports = {
     resetPasswordLoad,
     verifyresetPassword,
     emailVerificationLinkLoad,
-    emailVerificationLink
+    emailVerificationLink,
+    loadEmployPortal,
+    loadEmployPortal2
 }

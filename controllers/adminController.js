@@ -309,176 +309,6 @@ const deleteEmploy = async (req,res) => {
     }
 }
 
-const loadTeam = async (req,res) => {
-    try {
-        
-        const token = req.cookies.EMS_Token;
-        if (!token) {
-            res.render('unauthorizedError', {message: "You are Unauthorized"});
-        }
-        const employeeId = decodeToken(token);
-        const employeeData = await Employee.findById({ _id: employeeId });
-        const teamID = employeeData.teamID;
-
-        if(employeeData.teamID !== ''){
-
-            const teamData = await Employee.find({ teamID: teamID })
-            res.render('team', {teamData: teamData, user: employeeData});
-        }
-
-
-        res.render('team', {user: employeeData});
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-const insertTeamDetails = async (req,res) => {
-    try {
-
-        const token = req.cookies.EMS_Token;
-        if (!token) {
-            res.render('unauthorizedError', {message: "You are Unauthorized"});
-        }
-        const employeeId = decodeToken(token);
-        const employeeData = await Employee.findById({ _id: employeeId });
-
-        // const teamName = req.body.teamName;
-        // const team = await new Team({
-        //     teamName: teamName,
-        //     employeesID: employeeId,
-        // });
-        // const teamData = await team.save();
-        // const employData = await employeeData.teamName
-
-        res.redirect('/admin/create-team');
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-const loadCreateTeam = async (req,res) => {
-    try {
-
-        const token = req.cookies.EMS_Token;
-        if (!token) {
-            res.render('unauthorizedError', {message: "You are Unauthorized"});
-        }
-        const employeeId = decodeToken(token);
-        const employeeData = await Employee.findById({ _id: employeeId });
-
-
-        // Get Employs Data
-        var search = '';
-        if(req.query.search){
-            search = req.query.search;
-        }
-
-        var page = 1;
-        if(req.query.page){
-            page = req.query.page;
-        }
-
-        const limit = 5;
-
-        const employData = await Employee.find({
-            role:3,
-            $or:[
-                { name: { $regex: '.*' + search + '.*', $options:'i' } },
-                { email: { $regex: '.*' + search + '.*', $options:'i' } },
-                { phone: { $regex: '.*' + search + '.*', $options:'i' } },
-                { empCode: { $regex: '.*' + search + '.*', $options:'i' } }
-            ]
-        })
-        .limit(limit * 1)
-        .skip((page - 1) * limit)
-        .exec();
-
-
-        const count = await Employee.find({
-            role:3,
-            $or:[
-                { name: { $regex: '.*' + search + '.*', $options:'i' } },
-                { email: { $regex: '.*' + search + '.*', $options:'i' } },
-                { phone: { $regex: '.*' + search + '.*', $options:'i' } },
-                { empCode: { $regex: '.*' + search + '.*', $options:'i' } }
-            ]
-        }).countDocuments();
-
-        
-        res.render("create-team", { 
-            user: employeeData,
-            employs: employData,
-            totalPages: Math.ceil(count/limit),
-            currentPage: page,
-            next:page+1,
-            previous:page-1
-        });
-        
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-const createTeam = async (req,res) => {
-    try {
-        const token = req.cookies.EMS_Token;
-        if (!token) {
-            res.render('unauthorizedError', {message: "You are Unauthorized"});
-        }
-        const employeeId = decodeToken(token);
-        const employeeData = await Employee.findById({ _id: employeeId });
-
-        const teamName = req.body.teamName;
-        
-
-        const team = await new Team({
-            teamName: teamName,
-            employeesID: employeeId,
-        });
-        const teamData = await team.save();
-
-        team.employeesID.push(employId)
-        await team.save();
-
-
-
-    //     const employ = await Team.findById(userId);
-
-
-        res.redirect('/admin/team');
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-const assignTeam = async (req,res) => {
-    try {
-        const employId = req.params.id;
-        const team = await new Team({
-            teamName: teamName,
-            employeesID: employeeId,
-        });
-        const teamData = await team.save();
-
-        team.employeesID.push(employId)
-        await team.save();
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-
-
-
-
-
-
-
 const loadForgetPassword = async (req,res) => {
     try {
         
@@ -552,6 +382,44 @@ const verifyresetPassword = async (req,res) => {
     }
 }
 
+const loadEmployPortal = async (req,res) => {
+    try {
+
+        const employeeId = req.params.employeeId;
+
+        // Find the employee by ID
+        const employee = await Employee.findById(employeeId);
+
+        if (!employee) {
+            res.render('unauthorizedError');
+        }
+            // Find the team information for the employee's teamID
+        let teamInfo = null;
+        if (employee.teamID) {
+            teamInfo = await Team.findById(employee.teamID)
+            .populate('members', 'name empCode empJobTitle empImg')
+            .populate('projectManager', 'name empCode empJobTitle empImg');
+            res.render('my-profile', { employee, teamInfo, user: employee });
+        }else{
+            res.render('my-profile2', {user: employee});
+        }
+        
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const loadEmployPortal2 = async (req,res) =>{
+    try {
+        
+        res.render('my-profile2');
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     loadRegister,
     insertEmployee,
@@ -565,13 +433,10 @@ module.exports = {
     sendMail,
     logout,
     deleteEmploy,
-    loadTeam,
-    insertTeamDetails,
-    loadCreateTeam,
-    createTeam,
-    assignTeam,
+    loadEmployPortal,
     loadForgetPassword,
     resetPassword,
     resetPasswordLoad,
-    verifyresetPassword
+    verifyresetPassword,
+    loadEmployPortal2
 }

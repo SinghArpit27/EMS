@@ -42,13 +42,15 @@ const employeeSchema = new mongoose.Schema({
         type:String,
         default:''
     },
-    teamID:{
-        type: String,
-        default:''
+    teamID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Team',
+        default: null
+        // default: ''
     },
-    teamName:{
-        type:String,
-        default:''
+    teamName: {
+        type: String,
+        default: ''
     }
     
 });

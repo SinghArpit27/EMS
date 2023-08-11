@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EMS | Create Team</title>
+</head>
+<body>
+    <h1>Create a New Team</h1>
+    <form action="/superAdmin/create-team" method="post">
+        <label for="teamName">Team Name:</label>
+        <input type="text" id="teamName" name="teamName" required><br><br>
+
+        <label for="projectManager">Project Manager:</label>
+        <select id="projectManager" name="projectManagerId" required>
+            <% for (const admin of admins) { %>
+                <option value="<%= admin._id %>"><%= admin.name %></option>
+            <% } %>
+        </select><br><br>
+
+        <label for="members">Team Members:</label>
+        <select id="members" name="memberIds" multiple required>
+            <% for (const employee of employees) { %>
+                <option value="<%= employee._id %>"><%= employee.name %></option>
+            <% } %>
+        </select><br><br>
+
+        <button type="submit">Create Team</button>
+    </form>
+
+    <% if(typeof message !== 'undefined'){ %>
+        <p style="color: red;"><%= message %>&#x2713;&#x2713;</p>
+    <% } %>
+</body>
+</html>

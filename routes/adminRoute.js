@@ -72,15 +72,12 @@ adminRoute.get('/logout', auth, adminController.logout);
 // Delete Employ Route
 adminRoute.get('/delete-employ', adminController.deleteEmploy);
 
-// team creation
-adminRoute.get('/team', adminController.loadTeam);
-adminRoute.post('/team', adminController.insertTeamDetails);
 
+// Route to display employee portal
+adminRoute.get('/employee-portal/:employeeId', adminController.loadEmployPortal);
 
-// Team Route
-adminRoute.get('/create-team', adminController.loadCreateTeam);
-adminRoute.post('/create-team', adminController.createTeam);
-adminRoute.get('/createTeam/:id', adminController.assignTeam);
+// Route to display employee portal
+adminRoute.get('/employee-portal/:employeeId', adminController.loadEmployPortal2);
 
 
 
@@ -92,7 +89,7 @@ adminRoute.get('/createTeam/:id', adminController.assignTeam);
 
 
 adminRoute.get('*', (req,res) => {
-    res.redirect('/superAdmin/dashboard');
+    res.redirect('/admin/dashboard');
 });
 
 
