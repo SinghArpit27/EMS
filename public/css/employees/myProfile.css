@@ -84,3 +84,16 @@ body{
 }
 
 /* Add more styles as needed */
+
+.create-task-btn{
+    background-color: #475BE8;
+    color: #f0f0f0;
+    padding: .5rem 1rem;
+    border-radius: .1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40%;
+    margin: 1rem auto;
+}

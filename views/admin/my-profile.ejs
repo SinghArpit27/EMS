@@ -50,6 +50,12 @@
             <a href="/admin/register" class="menu-btn">Add New Employee</a>
           </li>
           <li><a href="/admin/sendMail" class="menu-btn">Send Mail</a></li>
+          <li>
+            <a href="/admin/employee-portal/<%= user._id %>" class="menu-btn"
+              >My Portal</a
+            >
+          </li>
+          <li><a href="/admin/employee-tasks" class="menu-btn">Tasks</a></li>
         </ul>
         <!-- <div class="profile-pic"> -->
         <img
@@ -104,37 +110,58 @@
 
     <!-- home/hero section -->
     <section class="home" id="home">
-        <div class="card">
-            <h1 id="welcome">Welcome to Your Employee Portal</h1>
-            <div id="employee-details">
-                <h2 class="section-title">Project Manager</h2>
-                <div class="profile">
-                    <img src="/uploads/employeeImages/<%= employee.empImg %>" class="profile-pic-team" alt="Profile Picture">
-                    <p class="profile-info"><span id="employee-name"><%= teamInfo.projectManager.name %></span></p>
-                    <p class="profile-info">E-Code: <%= teamInfo.projectManager.empCode %></p>
-                    <p class="profile-info"><%= teamInfo.projectManager.empJobTitle %></p>
-                </div>
-            </div>
+      <div class="card">
+        <h1 id="welcome">Welcome to Your Employee Portal</h1>
+        <div id="employee-details">
+          <h2 class="section-title">Project Manager</h2>
+          <div class="profile">
+            <img
+              src="/uploads/employeeImages/<%= employee.empImg %>"
+              class="profile-pic-team"
+              alt="Profile Picture"
+            />
+            <p class="profile-info">
+              <span id="employee-name"
+                ><%= teamInfo.projectManager.name %></span
+              >
+            </p>
+            <p class="profile-info">
+              E-Code: <%= teamInfo.projectManager.empCode %>
+            </p>
+            <p class="profile-info">
+              <%= teamInfo.projectManager.empJobTitle %>
+            </p>
+          </div>
+          <a href="/admin/create-task" class="create-task-btn">create task</a>
         </div>
-     
-        <% if (typeof teamInfo !== 'undefined') { %>
-            <div class="card">
-                <h2 class="section-title">Team Information</h2>
-                <p class="team-info">Team Name: <span id="team-name"><%= teamInfo.name %></span></p>
-                <div class="team-members">
-                    <% for (const member of teamInfo.members) { %>
-                        <div class="member-card">
-                            <img src="/uploads/employeeImages/<%= member.empImg %>" class="profile-pic-team" alt="Profile Picture">
-                            <h3 class="member-name"><%= member.name %></h3>
-                            <p class="member-info">E-Code: <span><%= member.empCode %></span></p>
-                            <p class="member-info"><%= member.empJobTitle %></p>
-                        </div>
-                    <% } %>
-                </div>
-            </div>
-        <% } else { %>
-            <p class="card">You are not part of any team.</p>
-        <% } %>
+      </div>
+
+      <% if (typeof teamInfo !== 'undefined') { %>
+      <div class="card">
+        <h2 class="section-title">Team Information</h2>
+        <p class="team-info">
+          Team Name: <span id="team-name"><%= teamInfo.name %></span>
+        </p>
+        <div class="team-members">
+          <% for (const member of teamInfo.members) { %>
+          <div class="member-card">
+            <img
+              src="/uploads/employeeImages/<%= member.empImg %>"
+              class="profile-pic-team"
+              alt="Profile Picture"
+            />
+            <h3 class="member-name"><%= member.name %></h3>
+            <p class="member-info">
+              E-Code: <span><%= member.empCode %></span>
+            </p>
+            <p class="member-info"><%= member.empJobTitle %></p>
+          </div>
+          <% } %>
+        </div>
+      </div>
+      <% } else { %>
+      <p class="card">You are not part of any team.</p>
+      <% } %>
     </section>
 
     <script src="/js/employees/home.js"></script>

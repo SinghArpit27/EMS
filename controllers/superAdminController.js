@@ -536,16 +536,12 @@ const createTeam = async (req,res) => {
 
 const deleteTeam = async (req,res) => {
     try {
-
-
         const teamId = req.params.teamId;
 
+        console.log(teamId);
         // Find the team by ID
         const team = await Team.findById(teamId);
-
-        // if (!team) {
-        //     return res.status(404).send('Team not found');
-        // }
+        console.log("team:-***********\n", team);
 
         // Update employees' team information
         await Employee.updateMany(

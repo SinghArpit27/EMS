@@ -1,5 +1,6 @@
 const Employee = require('../models/employeeSchema');
 const Team = require('../models/teamSchema');
+const Task = require('../models/taskSchema');
 const bcrypt = require('bcrypt');
 const { check, validationResult } = require("express-validator");
 const mailService = require('../helpers/employeeVerification');
@@ -7,6 +8,7 @@ const nodemailer = require("nodemailer");
 const { createToken, decodeToken } = require('../util/feature');
 const randomstring = require('randomstring');
 const excelJS = require('exceljs');
+const { format } = require('date-fns');
 
 
 
@@ -420,6 +422,99 @@ const loadEmployPortal2 = async (req,res) =>{
     }
 }
 
+const loadCreateTask = async (req,res) => {
+    try {
+
+        const token = req.cookies.EMS_Token;
+        if (!token) {
+            res.render('unauthorizedError', {message: "You are Unauthorized"});
+        }
+        const employeeId = decodeToken(token);
+        // const employeeData = await Employee.findById({ _id: employeeId });
+
+        
+
+        const adminId = employeeId; // Get the currently logged-in admin's employee ID
+        const admin = await Employee.findById(adminId).populate('teamID');
+        
+        if (!admin || admin.role !== 2) { // Check if the user is an admin/project manager
+            return res.status(403).send('Permission denied');
+        }
+        
+        const team = await Team.findById(admin.teamID).populate('members', 'name');
+
+        res.render('create-task', { team });
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const createTask = async (req,res) => {
+    try {
+        
+        const token = req.cookies.EMS_Token;
+        if (!token) {
+            res.render('unauthorizedError', {message: "You are Unauthorized"});
+        }
+        const employeeId = decodeToken(token);
+        
+        const { title, description, deadline, assignedTo } = req.body;
+        const createdBy = employeeId;
+
+        const inputDate = deadline;
+        const parts = inputDate.split("-");
+        // Re-arrange the parts to get the desired format "25-12-2015"
+        const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+
+
+
+        
+        const newTask = await Task.create({
+            title,
+            description,
+            deadline: formattedDate,
+            team: req.body.teamId,
+            createdBy,
+            assignedTo
+        });
+
+        res.redirect('/admin/create-task');
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const loadEmployeeTasks = async (req,res) => {
+    try {
+
+
+
+        const token = req.cookies.EMS_Token;
+        if (!token) {
+            res.render('unauthorizedError', {message: "You are Unauthorized"});
+        }
+        const employeeId = decodeToken(token);
+        const employeeData = await Employee.findById({ _id: employeeId });
+
+
+        const adminId = employeeId;
+        const admin = await Employee.findById(adminId).populate('teamID');
+
+        if (!admin || admin.role !== 2) {
+            return res.status(403).send('Permission denied');
+        }
+        const tasks = await Task.find({ team: admin.teamID }).populate('createdBy assignedTo');
+
+        res.render('employ-tasks', { admin, tasks, user: employeeData });
+
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 module.exports = {
     loadRegister,
     insertEmployee,
@@ -438,5 +533,8 @@ module.exports = {
     resetPassword,
     resetPasswordLoad,
     verifyresetPassword,
-    loadEmployPortal2
+    loadEmployPortal2,
+    loadCreateTask,
+    createTask,
+    loadEmployeeTasks
 }

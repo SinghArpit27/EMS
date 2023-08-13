@@ -48,7 +48,12 @@
           <a href="/admin/register" class="menu-btn">Add New Employee</a>
         </li>
         <li><a href="/admin/sendMail" class="menu-btn">Send Mail</a></li>
-        <li><a href="/admin/create-team" class="menu-btn">Create Team</a></li>
+        <li>
+          <a href="/admin/employee-portal/<%= user._id %>" class="menu-btn"
+            >My Portal</a
+          >
+        </li>
+        <li><a href="/admin/employee-tasks" class="menu-btn">Tasks</a></li>
       </ul>
       <!-- <div class="profile-pic"> -->
       <img

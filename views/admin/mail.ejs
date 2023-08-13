@@ -40,10 +40,22 @@
           <a href="#">EM<span>S</span></a>
         </div>
         <ul class="menu">
-          <li><a href="/admin/dashboard" class="menu-btn" aria-current="page">Home</a></li>
+          <li>
+            <a href="/admin/dashboard" class="menu-btn" aria-current="page"
+              >Home</a
+            >
+          </li>
           <li><a href="/admin/employsList">Employees</a></li>
-          <li><a href="/admin/register" class="menu-btn">Add New Employee</a></li>
+          <li>
+            <a href="/admin/register" class="menu-btn">Add New Employee</a>
+          </li>
           <li><a href="/admin/sendMail" class="menu-btn">Send Mail</a></li>
+          <li>
+            <a href="/admin/employee-portal/<%= user._id %>" class="menu-btn"
+              >My Portal</a
+            >
+          </li>
+          <li><a href="/admin/employee-tasks" class="menu-btn">Tasks</a></li>
         </ul>
         <!-- <div class="profile-pic"> -->
         <img
@@ -65,7 +77,10 @@
               <h3><%= user.name %> <br />E-Code ( <%= user.empCode %> )</h3>
             </div>
             <hr />
-            <a href="/admin/editProfile?id=<%= user._id %>" class="sub-menu-link">
+            <a
+              href="/admin/editProfile?id=<%= user._id %>"
+              class="sub-menu-link"
+            >
               <i class="fa fa-user" aria-hidden="true"></i>
               <p>Edit Profile</p>
               <!-- <span>></span> -->

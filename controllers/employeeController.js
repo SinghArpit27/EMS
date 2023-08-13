@@ -1,5 +1,6 @@
 const Employee = require('../models/employeeSchema');
 const Team = require('../models/teamSchema');
+const Task = require('../models/taskSchema');
 const bcrypt = require('bcrypt');
 const { check, validationResult } = require("express-validator");
 const mailService = require('../helpers/employeeVerification');
@@ -342,6 +343,46 @@ const loadEmployPortal2 = async (req,res) => {
     }
 }
 
+const loadTask = async (req,res) => {
+    try {
+
+        const token = req.cookies.EMS_Token;
+        if (!token) {
+            res.render('unauthorizedError', {message: "You are Unauthorized"});
+        }
+        const employeeId = decodeToken(token);
+        const employeeData = await Employee.findById({ _id: employeeId });
+
+
+        const employId = employeeId;
+        const admin = await Employee.findById(employId).populate('teamID');
+
+        if (!admin || admin.role !== 3) {
+            return res.status(403).send('Permission denied');
+        }
+        const tasks = await Task.find({ team: admin.teamID }).populate('createdBy assignedTo');
+
+        res.render('my-task', { admin, tasks, user: employeeData });
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const updateTaskStatus = async (req,res) => {
+    try {
+        
+        const taskId = req.params.taskId;
+        const status = req.body.status;
+
+        const task = await Task.findByIdAndUpdate(taskId, { status }, { new: true });
+        res.redirect('/employ-tasks');
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 module.exports = {
     verifyMail,
@@ -360,5 +401,7 @@ module.exports = {
     emailVerificationLinkLoad,
     emailVerificationLink,
     loadEmployPortal,
-    loadEmployPortal2
+    loadEmployPortal2,
+    loadTask,
+    updateTaskStatus
 }

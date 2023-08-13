@@ -74,4 +74,8 @@ employRoute.get('/errorUna', employeeController.loadUnauthorizedError);
 employRoute.get('/employee-portal/:employeeId', employeeController.loadEmployPortal);
 employRoute.get('/employee-portal/:employeeId', employeeController.loadEmployPortal2);
 
+// Task Route
+employRoute.get('/employ-tasks', employeeController.loadTask);
+employRoute.post('/update-task-status/:taskId', employeeController.updateTaskStatus);
+
 module.exports = employRoute;

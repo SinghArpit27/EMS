@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Task</title>
+</head>
+<body>
+    <h1>Create Task</h1>
+    <form action="/admin/create-task" method="post">
+        <label>Title:</label>
+        <input type="text" name="title" required><br>
+        <label>Description:</label>
+        <textarea name="description"></textarea><br>
+        <label>Deadline:</label>
+        <input type="date" name="deadline" required><br>
+        <input type="hidden" name="teamId" value="<%= team._id %>">
+        <label>Assign To:</label>
+        <select name="assignedTo">
+            <% team.members.forEach(member => { %>
+                <option value="<%= member._id %>"><%= member.name %></option>
+            <% }) %>
+        </select><br>
+        <button type="submit">Create Task</button>
+    </form>
+</body>
+</html>

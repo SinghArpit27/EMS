@@ -80,8 +80,13 @@ adminRoute.get('/employee-portal/:employeeId', adminController.loadEmployPortal)
 adminRoute.get('/employee-portal/:employeeId', adminController.loadEmployPortal2);
 
 
+// Create task
+adminRoute.get('/create-task', adminController.loadCreateTask);
+adminRoute.post('/create-task', adminController.createTask);
 
 
+// Route to display tasks in employee portal
+adminRoute.get('/employee-tasks', adminController.loadEmployeeTasks);
 
 
 
